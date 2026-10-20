@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="340" viewBox="0 0 1000 340" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#57606a"/></marker></defs>
+<rect width="1000" height="340" rx="12" fill="#f6f8fa"/>
+<rect x="40" y="36" width="6" height="40" fill="#ff9900"/>
+<text x="60" y="54" font-size="22" font-weight="600" fill="#1f2328">Security Monitoring with EventBridge</text>
+<text x="60" y="78" font-size="14" fill="#57606a">Event-driven alerting on high-risk AWS activity</text>
+<rect x="40.0" y="120" width="155.2" height="130" rx="8" fill="#fff" stroke="#d0d7de"/>
+<rect x="40.0" y="120" width="155.2" height="4" rx="2" fill="#ff9900"/>
+<text x="54.0" y="154" font-size="15" font-weight="600" fill="#1f2328">AWS activity</text>
+<text x="54.0" y="180" font-size="12.5" fill="#57606a">Console sign-ins</text>
+<text x="54.0" y="200" font-size="12.5" fill="#57606a">IAM / EC2 API calls</text>
+<text x="54.0" y="220" font-size="12.5" fill="#57606a">GuardDuty findings</text>
+<line x1="199.2" y1="185.0" x2="227.2" y2="185.0" stroke="#57606a" stroke-width="2" marker-end="url(#a)"/>
+<rect x="231.2" y="120" width="155.2" height="130" rx="8" fill="#fff" stroke="#d0d7de"/>
+<rect x="231.2" y="120" width="155.2" height="4" rx="2" fill="#ff9900"/>
+<text x="245.2" y="154" font-size="15" font-weight="600" fill="#1f2328">CloudTrail</text>
+<text x="245.2" y="180" font-size="12.5" fill="#57606a">Records management</text>
+<text x="245.2" y="200" font-size="12.5" fill="#57606a">events</text>
+<line x1="390.4" y1="185.0" x2="418.4" y2="185.0" stroke="#57606a" stroke-width="2" marker-end="url(#a)"/>
+<rect x="422.4" y="120" width="155.2" height="130" rx="8" fill="#fff" stroke="#d0d7de"/>
+<rect x="422.4" y="120" width="155.2" height="4" rx="2" fill="#ff9900"/>
+<text x="436.4" y="154" font-size="15" font-weight="600" fill="#1f2328">EventBridge rules</text>
+<text x="436.4" y="180" font-size="12.5" fill="#57606a">Root sign-in, IAM,</text>
+<text x="436.4" y="200" font-size="12.5" fill="#57606a">security groups,</text>
+<text x="436.4" y="220" font-size="12.5" fill="#57606a">CloudTrail tampering</text>
+<line x1="581.5999999999999" y1="185.0" x2="609.5999999999999" y2="185.0" stroke="#57606a" stroke-width="2" marker-end="url(#a)"/>
+<rect x="613.5999999999999" y="120" width="155.2" height="130" rx="8" fill="#fff" stroke="#d0d7de"/>
+<rect x="613.5999999999999" y="120" width="155.2" height="4" rx="2" fill="#ff9900"/>
+<text x="627.5999999999999" y="154" font-size="15" font-weight="600" fill="#1f2328">SNS topic</text>
+<text x="627.5999999999999" y="180" font-size="12.5" fill="#57606a">security-alerts</text>
+<line x1="772.8" y1="185.0" x2="800.8" y2="185.0" stroke="#57606a" stroke-width="2" marker-end="url(#a)"/>
+<rect x="804.8" y="120" width="155.2" height="130" rx="8" fill="#fff" stroke="#d0d7de"/>
+<rect x="804.8" y="120" width="155.2" height="4" rx="2" fill="#ff9900"/>
+<text x="818.8" y="154" font-size="15" font-weight="600" fill="#1f2328">Email alert</text>
+<text x="818.8" y="180" font-size="12.5" fill="#57606a">Analyst notified</text>
+<text x="818.8" y="200" font-size="12.5" fill="#57606a">for triage</text>
+<text x="40" y="306" font-size="12.5" fill="#57606a">Architecture overview. All resources are defined in template.yaml (CloudFormation).</text>
+</svg>

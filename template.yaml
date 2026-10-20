@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Security monitoring with Amazon EventBridge. Routes high-risk CloudTrail and GuardDuty
+  events to an SNS topic that emails an alert address.
+
+Parameters:
+  AlertEmail:
+    Type: String
+    Description: Email address that receives security alerts (confirm the SNS subscription email).
+
+Resources:
+  AlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: security-alerts
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref AlertEmail
+
+  AlertTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics: [!Ref AlertTopic]
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowEventBridgePublish
+            Effect: Allow
+            Principal: { Service: events.amazonaws.com }
+            Action: sns:Publish
+            Resource: !Ref AlertTopic
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+
+  RootAccountSignInRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Root user signed in to the AWS console.
+      EventPattern:
+        detail-type: ['AWS Console Sign In via CloudTrail']
+        detail:
+          userIdentity:
+            type: ['Root']
+      Targets:
+        - { Arn: !Ref AlertTopic, Id: sns-alerts }
+
+  IamChangeRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: IAM users, keys, or policies were created or changed.
+      EventPattern:
+        source: ['aws.iam']
+        detail-type: ['AWS API Call via CloudTrail']
+        detail:
+          eventSource: ['iam.amazonaws.com']
+          eventName:
+            - CreateUser
+            - CreateAccessKey
+            - AddUserToGroup
+            - AttachUserPolicy
+            - AttachRolePolicy
+            - PutUserPolicy
+            - PutRolePolicy
+            - CreatePolicyVersion
+      Targets:
+        - { Arn: !Ref AlertTopic, Id: sns-alerts }
+
+  SecurityGroupChangeRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Security group rules were opened, closed, created, or deleted.
+      EventPattern:
+        source: ['aws.ec2']
+        detail-type: ['AWS API Call via CloudTrail']
+        detail:
+          eventSource: ['ec2.amazonaws.com']
+          eventName:
+            - AuthorizeSecurityGroupIngress
+            - AuthorizeSecurityGroupEgress
+            - RevokeSecurityGroupIngress
+            - CreateSecurityGroup
+            - DeleteSecurityGroup
+      Targets:
+        - { Arn: !Ref AlertTopic, Id: sns-alerts }
+
+  CloudTrailTamperingRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: CloudTrail logging was stopped, deleted, or reconfigured (defense evasion).
+      EventPattern:
+        source: ['aws.cloudtrail']
+        detail-type: ['AWS API Call via CloudTrail']
+        detail:
+          eventSource: ['cloudtrail.amazonaws.com']
+          eventName: [StopLogging, DeleteTrail, UpdateTrail, PutEventSelectors]
+      Targets:
+        - { Arn: !Ref AlertTopic, Id: sns-alerts }
+
+  GuardDutyHighSeverityRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: GuardDuty finding with severity 7.0 or higher (requires GuardDuty to be enabled).
+      EventPattern:
+        source: ['aws.guardduty']
+        detail-type: ['GuardDuty Finding']
+        detail:
+          severity: [{ numeric: ['>=', 7] }]
+      Targets:
+        - { Arn: !Ref AlertTopic, Id: sns-alerts }
+
+Outputs:
+  AlertTopicArn:
+    Description: SNS topic that receives security alerts.
+    Value: !Ref AlertTopic
